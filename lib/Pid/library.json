@@ -1,0 +1,7 @@
+{
+  "name": "Pid",
+  "version": "0.1.0",
+  "description": "Discrete PID controller with derivative filtering and anti-windup",
+  "frameworks": "*",
+  "platforms": "*"
+}
