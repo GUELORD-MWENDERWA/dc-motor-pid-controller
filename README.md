@@ -18,6 +18,12 @@ The PID is a hardware-independent library with host-side unit tests that close t
 | Output clamping with conditional-integration anti-windup | After saturation the integral does not overshoot the next setpoint |
 | Bumpless reset | Re-enabling the loop starts from the current speed |
 
+## Simulated response
+
+![PID step response](docs/images/step_response.png)
+
+*`lib/Pid/Pid.h` compiled natively and run in closed loop with the first-order motor model of the unit tests. The P controller keeps a steady-state error; the integral term removes it. Between 1 s and 2 s the setpoint is out of reach and the PWM saturates: with anti-windup the controller recovers as soon as the setpoint returns to 150 rpm, without it the integral keeps the motor at full power for about 300 ms longer. Regenerate with `python docs/make_figures.py` (needs g++).*
+
 ## Hardware
 
 | Component | Arduino pin |
@@ -47,6 +53,16 @@ pio test -e native        # run the controller unit tests on your computer
 pio run -e uno -t upload  # flash the Arduino
 pio device monitor        # or open the Arduino Serial Plotter at 115200 baud
 ```
+
+### Prebuilt firmware
+
+Each [release](https://github.com/GUELORD-MWENDERWA/dc-motor-pid-controller/releases/latest) contains `dc-motor-pid-controller-uno.hex` for the Arduino Uno (ATmega328P). Flash it without installing PlatformIO:
+
+```bash
+avrdude -p m328p -c arduino -P /dev/ttyUSB0 -b 115200 -U flash:w:dc-motor-pid-controller-uno.hex:i
+```
+
+On Windows the port is `COM3` or similar; `avrdude` ships with the Arduino IDE.
 
 ## Serial commands
 
